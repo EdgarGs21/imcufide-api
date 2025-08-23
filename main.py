@@ -1,0 +1,28 @@
+# main.py
+from fastapi import FastAPI
+import models
+from database import engine
+from routers import deportes, categorias, equipos, jugadores, sedes, partidos, eventos, auth
+
+# Esto crea todas las tablas en la base de datos
+models.Base.metadata.create_all(bind=engine)
+
+app = FastAPI(
+    title="API del Proyecto IMCUFIDE",
+    description="API para la gestión de las Ligas de Desarrollo de Tenango.",
+    version="1.0.0",
+)
+
+# Incluir los routers en la aplicación principal
+app.include_router(deportes.router)
+app.include_router(categorias.router)
+app.include_router(equipos.router)
+app.include_router(jugadores.router)
+app.include_router(sedes.router)
+app.include_router(partidos.router)
+app.include_router(eventos.router)
+app.include_router(auth.router)
+
+@app.get("/")
+def read_root():
+    return {"proyecto": "API de IMCUFIDE"}
