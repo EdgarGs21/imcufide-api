@@ -1,5 +1,6 @@
 # main.py
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import models
 from database import engine
 from routers import deportes, categorias, equipos, jugadores, sedes, partidos, eventos, auth
@@ -11,6 +12,21 @@ app = FastAPI(
     title="API del Proyecto IMCUFIDE",
     description="API para la gestión de las Ligas de Desarrollo de Tenango.",
     version="1.0.0",
+)
+
+origins = [
+    "http://localhost",
+    "http://localhost:8080",
+    "http://localhost:3000",
+    # URL del u futuro sitio web cuando se tenga
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Incluir los routers en la aplicación principal
