@@ -14,6 +14,10 @@ router = APIRouter(
 
 @router.post("/", response_model=schemas.Deporte, status_code=201)
 def crear_nuevo_deporte(deporte: schemas.DeporteCreate, db: Session = Depends(get_db), current_user: models.Usuario = Depends(get_current_user)):
+      # --- Verificación de Rol ---
+    if current_user.rol != "super-admin":
+        raise HTTPException(status_code=403, detail="No tienes permiso para crear deportes")
+    
     db_deporte = crud.get_deporte_by_name(db, nombre=deporte.nombre)
     if db_deporte:
         raise HTTPException(status_code=400, detail="El deporte con este nombre ya existe")
@@ -33,6 +37,10 @@ def leer_deporte_por_id(deporte_id: int, db: Session = Depends(get_db)):
 
 @router.put("/{deporte_id}", response_model=schemas.Deporte)
 def actualizar_deporte(deporte_id: int, deporte: schemas.DeporteCreate, db: Session = Depends(get_db), current_user: models.Usuario = Depends(get_current_user)):
+      # --- Verificación de Rol ---
+    if current_user.rol != "super-admin":
+        raise HTTPException(status_code=403, detail="No tienes permiso para actualizar deportes")
+
     db_deporte = crud.update_deporte(db, deporte_id=deporte_id, deporte=deporte)
     if db_deporte is None:
         raise HTTPException(status_code=404, detail="Deporte no encontrado")
@@ -40,6 +48,10 @@ def actualizar_deporte(deporte_id: int, deporte: schemas.DeporteCreate, db: Sess
 
 @router.delete("/{deporte_id}", response_model=schemas.Deporte)
 def borrar_deporte(deporte_id: int, db: Session = Depends(get_db), current_user: models.Usuario = Depends(get_current_user)):
+     # --- Verificación de Rol ---
+    if current_user.rol != "super-admin":
+        raise HTTPException(status_code=403, detail="No tienes permiso para borrar deportes")
+
     db_deporte = crud.delete_deporte(db, deporte_id=deporte_id)
     if db_deporte is None:
         raise HTTPException(status_code=404, detail="Deporte no encontrado")
