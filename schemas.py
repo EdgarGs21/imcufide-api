@@ -29,8 +29,20 @@ class Categoria(CategoriaBase):
     class Config:
         from_attributes = True
 
+# --- Schemas para Documento ---
+class DocumentoBase(BaseModel):
+    nombre: str
+    url_archivo: str
+
+class DocumentoCreate(DocumentoBase):
+    jugador_id: int
+
+class Documento(DocumentoBase):
+    id: int
+    class Config:
+        from_attributes = True
+        
 # --- Schemas para Jugador ---
-# Definimos los schemas de Jugador PRIMERO
 class JugadorBase(BaseModel):
     nombre: str
     foto: Optional[str] = None
@@ -44,11 +56,12 @@ class JugadorCreate(JugadorBase):
 
 class Jugador(JugadorBase):
     id: int
+    documentos: List[Documento] = []
+
     class Config:
         from_attributes = True
 
 # --- Schemas para Equipo ---
-# Ahora definimos Equipo, que hace referencia a 'Jugador'
 class EquipoBase(BaseModel):
     nombre: str
     escudo: Optional[str] = None
@@ -129,5 +142,6 @@ class Usuario(UsuarioBase):
         from_attributes = True
 
 # --- Reconstrucción de Modelos ---
+Jugador.model_rebuild()
 Equipo.model_rebuild()
 Partido.model_rebuild()

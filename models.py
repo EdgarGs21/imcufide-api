@@ -56,6 +56,7 @@ class Jugador(Base):
     dorsal = Column(Integer)
     municipio = Column(String)
     equipo_id = Column(Integer, ForeignKey("equipos.id"))
+    documentos = relationship("Documento", back_populates="jugador", cascade="all, delete-orphan")
 
     equipo = relationship("Equipo", back_populates="jugadores")
     eventos = relationship("EventoPartido", back_populates="jugador")
@@ -102,3 +103,13 @@ class EventoPartido(Base):
 
     partido = relationship("Partido", back_populates="eventos")
     jugador = relationship("Jugador", back_populates="eventos")
+
+class Documento(Base):
+    __tablename__ = "documentos"
+
+    id = Column(Integer, primary_key=True, index=True)
+    nombre = Column(String, index=True)
+    url_archivo = Column(String, nullable=False)
+    jugador_id = Column(Integer, ForeignKey("jugadores.id"))
+
+    jugador = relationship("Jugador", back_populates="documentos")

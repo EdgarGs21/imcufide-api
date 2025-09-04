@@ -241,3 +241,11 @@ def create_user(db: Session, user: schemas.UsuarioCreate):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+# --- CRUD para Documento ---
+def create_documento(db: Session, documento: schemas.DocumentoCreate):
+    db_documento = models.Documento(**documento.model_dump())
+    db.add(db_documento)
+    db.commit()
+    db.refresh(db_documento)
+    return db_documento
