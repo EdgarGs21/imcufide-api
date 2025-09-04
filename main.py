@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import models
 from database import engine
-from routers import deportes, categorias, equipos, jugadores, sedes, partidos, eventos, auth
+from routers import deportes, categorias, equipos, jugadores, sedes, partidos, eventos, auth, documentos
 
 # Esto crea todas las tablas en la base de datos
 models.Base.metadata.create_all(bind=engine)
@@ -38,6 +38,7 @@ app.include_router(sedes.router)
 app.include_router(partidos.router)
 app.include_router(eventos.router)
 app.include_router(auth.router)
+app.include_router(documentos.router)
 
 @app.get("/")
 def read_root():
